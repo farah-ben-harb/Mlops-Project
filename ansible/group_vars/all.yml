@@ -6,3 +6,4 @@ docker_network_name: neofacto-mlops-network
 
 api_port: 8002
 mlflow_port: 5001
+api_image: ghcr.io/farah-ben-harb/mini-crm-api:sha-2fa5a6812b162f0fee2c57fb1e2ca53ce5c14b42

@@ -35,6 +35,7 @@
       - "{{ docker_network_name }}"
   changed_when: false
 
+
 - name: Verifier les images Docker
   command:
     argv:
@@ -43,9 +44,9 @@
       - inspect
       - "{{ item }}"
   loop:
-    - mini-crm-api:v1
     - mini-crm-mlflow:v1
   changed_when: false
+
 
 - name: Verifier les fichiers du projet
   stat:

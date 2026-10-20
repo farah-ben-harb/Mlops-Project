@@ -1,7 +1,7 @@
 
 services:
   api:
-    image: mini-crm-api:v1
+    image: ${API_IMAGE:-mini-crm-api:v1}
     ports:
       - "127.0.0.1:8002:8000"
     networks:

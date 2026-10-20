@@ -1,3 +1,4 @@
+
 ---
 - name: Deployer FastAPI et MLflow
   community.docker.docker_compose_v2:
@@ -5,12 +6,15 @@
     files:
       - compose.yaml
     state: present
-    pull: never
+    pull: missing
     build: never
     recreate: auto
     remove_orphans: false
+  environment:
+    API_IMAGE: "{{ api_image }}"
   register: deploy_result
 
 - name: Afficher le resultat
   debug:
     msg: "Deployment changed={{ deploy_result.changed }}"
+
