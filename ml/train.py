@@ -66,6 +66,11 @@ f1 = f1_score(
 print(f"\nAccuracy : {accuracy:.2%}")
 print(f"F1-score : {f1:.2%}")
 
+# Model quality gate
+if f1 < 0.70:
+    raise RuntimeError(f"Model rejected: F1={f1:.3f}")
+
+
 print("\nClassification Report :")
 print(classification_report(
     y_test,
@@ -117,3 +122,18 @@ with mlflow.start_run(run_name="tfidf-logreg-v2") as run:
     print("\nMLflow Run enregistre !")
     print(f"Run ID : {run.info.run_id}")
 
+
+    # Enregistrer une version dans le Model Registry
+    import os
+
+    if os.environ.get("REGISTER_MODEL") == "1":
+        import mlflow.sklearn
+
+        mlflow.sklearn.log_model(
+            sk_model=model,
+            name="classifier",
+            registered_model_name="MiniCRMClassifier",
+            input_example=X_train[:2],
+        )
+
+        print("Modele enregistre dans le Registry !")
