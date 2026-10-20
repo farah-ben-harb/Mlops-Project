@@ -1,0 +1,8 @@
+---
+project_name: mini-crm
+project_dir: /home/farahbenharb/neofacto-mlops-lab
+
+docker_network_name: neofacto-mlops-network
+
+api_port: 8002
+mlflow_port: 5001

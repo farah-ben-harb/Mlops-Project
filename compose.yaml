@@ -1,0 +1,34 @@
+
+services:
+  api:
+    image: mini-crm-api:v1
+    ports:
+      - "127.0.0.1:8002:8000"
+    networks:
+      - crm_network
+    restart: unless-stopped
+
+  mlflow:
+    image: mini-crm-mlflow:v1
+    ports:
+      - "127.0.0.1:5001:5000"
+
+    volumes:
+      - type: bind
+        source: ./mlflow.db
+        target: /tracking/mlflow.db
+
+      - type: bind
+        source: ./mlruns
+        target: /home/farahbenharb/neofacto-mlops-lab/mlruns
+# 1. Utiliser ce réseau, nom logique utilisé
+    networks:
+      - crm_network
+
+    restart: unless-stopped
+# 2. Définir ce réseau
+networks:
+  crm_network:
+    external: true
+    name: neofacto-mlops-network
+

@@ -1,0 +1,31 @@
+id,skills,domain
+1,Linux Docker Kubernetes Terraform Ansible,DevOps
+2,GitLab CI Docker Linux Prometheus,DevOps
+3,AWS Terraform Kubernetes Helm ArgoCD,DevOps
+4,Linux Bash Ansible Nginx Docker,DevOps
+5,Azure Terraform GitHub Actions Kubernetes,DevOps
+6,Docker Compose Grafana Prometheus Linux,DevOps
+7,Helm Kubernetes ArgoCD GitOps Security,DevOps
+8,Linux CI CD Docker Trivy Terraform,DevOps
+9,Ansible Terraform Networks Infrastructure,DevOps
+10,GitHub Actions Docker Monitoring SRE,DevOps
+11,Python FastAPI PostgreSQL Pytest,Backend
+12,Java Spring Boot MySQL REST API,Backend
+13,NodeJS Express MongoDB JavaScript,Backend
+14,Python Django Redis PostgreSQL,Backend
+15,TypeScript NestJS PostgreSQL API,Backend
+16,Python Flask SQLAlchemy Pytest,Backend
+17,Java Spring Security Kafka Microservices,Backend
+18,FastAPI Docker PostgreSQL Alembic,Backend
+19,NodeJS REST API Authentication JWT,Backend
+20,Go Gin GRPC API PostgreSQL,Backend
+21,Python MLflow Scikit-learn Pandas,MLOps
+22,TensorFlow Python MLflow Model Training,MLOps
+23,PyTorch Python Experiment Tracking,MLOps
+24,MLflow Docker Inference Machine Learning,MLOps
+25,Pandas Sklearn Data Preprocessing Classification,MLOps
+26,Python Machine Learning Feature Engineering,MLOps
+27,Keras Neural Network Training Python,MLOps
+28,MLflow Model Registry Model Evaluation,MLOps
+29,Sklearn Regression Classification Pipeline,MLOps
+30,Python Transformers Embeddings MLflow,MLOps

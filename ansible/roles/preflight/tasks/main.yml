@@ -1,0 +1,80 @@
+---
+- name: Verifier Docker
+  command: docker info
+  changed_when: false
+
+- name: Verifier Docker Compose
+  command: docker compose version
+  changed_when: false
+
+- name: Valider le fichier Compose
+  command:
+    cmd: docker compose config --quiet
+    chdir: "{{ project_dir }}"
+  changed_when: false
+
+- name: Verifier les services Compose
+  command:
+    cmd: docker compose config --services
+    chdir: "{{ project_dir }}"
+  register: compose_services
+  changed_when: false
+
+- name: Confirmer les services
+  assert:
+    that:
+      - "'api' in compose_services.stdout_lines"
+      - "'mlflow' in compose_services.stdout_lines"
+
+- name: Verifier le reseau Terraform
+  command:
+    argv:
+      - docker
+      - network
+      - inspect
+      - "{{ docker_network_name }}"
+  changed_when: false
+
+- name: Verifier les images Docker
+  command:
+    argv:
+      - docker
+      - image
+      - inspect
+      - "{{ item }}"
+  loop:
+    - mini-crm-api:v1
+    - mini-crm-mlflow:v1
+  changed_when: false
+
+- name: Verifier les fichiers du projet
+  stat:
+    path: "{{ project_dir }}/{{ item }}"
+  loop:
+    - compose.yaml
+    - models/model.joblib
+    - mlflow.db
+  register: project_files
+
+- name: Confirmer les fichiers
+  assert:
+    that:
+      - item.stat.isreg | default(false)
+    fail_msg: "Fichier manquant : {{ item.item }}"
+  loop: "{{ project_files.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: Verifier le dossier MLflow
+  stat:
+    path: "{{ project_dir }}/mlruns"
+  register: mlruns_check
+
+- name: Confirmer le dossier MLflow
+  assert:
+    that:
+      - mlruns_check.stat.isdir | default(false)
+
+- name: Afficher le resultat
+  debug:
+    msg: "Preflight OK : environnement pret."

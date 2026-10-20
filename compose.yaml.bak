@@ -1,0 +1,24 @@
+
+services:
+  api:
+    image: mini-crm-api:v1
+    ports:
+      - "127.0.0.1:8002:8000"
+    restart: unless-stopped
+
+  mlflow:
+    image: mini-crm-mlflow:v1
+    ports:
+      - "127.0.0.1:5001:5000"
+
+    volumes:
+      - type: bind
+        source: ./mlflow.db
+        target: /tracking/mlflow.db
+
+      - type: bind
+        source: ./mlruns
+        target: /home/farahbenharb/neofacto-mlops-lab/mlruns
+
+    restart: unless-stopped
+

@@ -1,0 +1,15 @@
+---
+- name: Automatiser Mini CRM Intelligence
+  hosts: lab
+  gather_facts: true
+  become: false
+
+  roles:
+    - role: preflight
+      tags: preflight
+
+    - role: deploy
+      tags: deploy
+
+    - role: verify
+      tags: verify

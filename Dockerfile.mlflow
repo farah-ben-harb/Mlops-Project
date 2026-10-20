@@ -1,0 +1,24 @@
+
+# Image Python legere
+FROM python:3.12-slim
+
+# Configuration Python et pip
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PIP_NO_CACHE_DIR=1
+
+# Dossier de travail
+WORKDIR /tracking
+
+# Installer MLflow
+RUN pip install --no-cache-dir mlflow==3.17.1
+
+# Port interne MLflow
+EXPOSE 5000
+
+# Demarrer MLflow UI
+CMD ["mlflow", "ui", \
+     "--backend-store-uri", "sqlite:////tracking/mlflow.db", \
+     "--host", "0.0.0.0", \
+     "--port", "5000"]
+

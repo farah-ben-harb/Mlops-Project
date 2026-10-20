@@ -1,0 +1,39 @@
+---
+- name: Verifier FastAPI
+  uri:
+    url: "http://127.0.0.1:{{ api_port }}/health"
+    method: GET
+    status_code: 200
+  register: api_health
+  retries: 12
+  delay: 5
+  until: api_health.status == 200
+
+- name: Tester la prediction ML
+  uri:
+    url: "http://127.0.0.1:{{ api_port }}/predict"
+    method: POST
+    body_format: json
+    body:
+      skills: "Python Docker Kubernetes Terraform"
+    status_code: 200
+  register: prediction_result
+
+- name: Afficher la prediction
+  debug:
+    var: prediction_result.json
+
+- name: Verifier MLflow
+  uri:
+    url: "http://127.0.0.1:{{ mlflow_port }}/"
+    method: GET
+    follow_redirects: none
+    status_code: [200, 301, 302, 307, 308]
+  register: mlflow_health
+  retries: 12
+  delay: 5
+  until: mlflow_health.status in [200, 301, 302, 307, 308]
+
+- name: Afficher le statut
+  debug:
+    msg: "FastAPI et MLflow sont accessibles."

@@ -1,0 +1,33 @@
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# MLflow
+mlflow.db*
+mlruns/
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+*.tfplan
+
+# Ansible
+*.retry
+
+# IDE
+.vscode/
+.idea/
