@@ -21,7 +21,12 @@ COPY models/model.joblib ./models/model.joblib
 
 # 7. Port utilise par FastAPI
 EXPOSE 8000
+# Creer un utilisateur non-root
+RUN groupadd --gid 1000 appgroup \
+    && useradd --uid 1000 --gid appgroup --create-home appuser
 
+# Executer FastAPI sans privileges root
+USER appuser
 # 8. Demarrer l'API
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
