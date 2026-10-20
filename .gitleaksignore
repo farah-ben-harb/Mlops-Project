@@ -1,0 +1,2 @@
+# False positive: Git commit SHA used as Docker image tag
+a9f93562fb49c73af2da46d751f102607f15ebf0:ansible/group_vars/all.yml:generic-api-key:9
