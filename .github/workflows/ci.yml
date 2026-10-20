@@ -39,6 +39,40 @@ jobs:
       - name: Run pytest
         run: python -m pytest -q
 
+  ml-training:
+    name: ML Training and Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Install ML dependencies
+        run: |
+          python -m pip install \
+            -r requirements-api.txt \
+            mlflow==3.17.1
+
+      - name: Validate dataset
+        run: python ml/validate_data.py
+
+      - name: Train and evaluate
+        run: python ml/train.py
+
+      - name: Upload validated model
+        uses: actions/upload-artifact@v4
+        with:
+          name: trained-model
+          path: models/model.joblib
+          if-no-files-found: error
+
   sast:
     name: Python SAST - Bandit
     runs-on: ubuntu-latest
@@ -96,7 +130,7 @@ jobs:
 
   docker-build:
     name: Docker Build and Security Scan
-    needs: [tests, sast, secrets, dependencies]
+    needs: [tests, ml-training, sast, secrets, dependencies]
     runs-on: ubuntu-latest
 
     steps:
@@ -107,7 +141,13 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t mini-crm-api:ci .
-
+        
+      - name: Download validated model
+        uses: actions/download-artifact@v4
+        with:
+          name: trained-model
+          path: models/
+          
       - name: Scan Docker image
         uses: aquasecurity/trivy-action@v0.36.0
         with:
@@ -135,7 +175,13 @@ jobs:
         uses: actions/checkout@v7
         with:
           persist-credentials: false
-
+          
+      - name: Download validated model
+        uses: actions/download-artifact@v4
+        with:
+          name: trained-model
+          path: models/
+          
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -154,4 +200,7 @@ jobs:
             -t "${IMAGE}:${VERSION}" .
 
           docker push "${IMAGE}:${VERSION}"
+
+  
+
 
