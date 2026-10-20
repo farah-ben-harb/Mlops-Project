@@ -118,3 +118,40 @@ jobs:
           ignore-unfixed: true
           exit-code: '1'
 
+  publish:
+    name: Publish Docker image to GHCR
+    needs: docker-build
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        env:
+          IMAGE: ghcr.io/farah-ben-harb/mini-crm-api
+          VERSION: sha-${{ github.sha }}
+          SOURCE: https://github.com/${{ github.repository }}
+        run: |
+          docker build \
+            --label "org.opencontainers.image.source=${SOURCE}" \
+            -t "${IMAGE}:${VERSION}" .
+
+          docker push "${IMAGE}:${VERSION}"
+
