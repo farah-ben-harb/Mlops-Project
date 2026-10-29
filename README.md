@@ -1,65 +1,134 @@
-# Mini CRM Intelligence — DevOps & MLOps
+# Mini CRM Intelligence
 
-End-to-end DevOps/MLOps project combining machine learning, infrastructure automation, DevSecOps and container deployment.
+Mini CRM Intelligence est un laboratoire local de classification de profils techniques. Il combine une API FastAPI, un pipeline TF-IDF + Logistic Regression, MLflow, Docker Compose, Ansible, Terraform pour le réseau Docker et une CI GitHub Actions avec contrôles de sécurité.
+
+Le projet est un démonstrateur pédagogique basé sur 30 profils synthétiques équilibrés entre `Backend`, `DevOps` et `MLOps`. Il ne constitue pas une mesure de performance sur des profils réels. Aucun déploiement AWS n'est inclus dans l'état actuel du dépôt.
 
 ## Architecture
 
-GitHub → GitHub Actions → GHCR → Ansible → Docker Compose → FastAPI
+```mermaid
+flowchart LR
+  D[data/profiles.csv] --> T[ml/train.py]
+  T --> M[models/model.joblib]
+  T --> F[MLflow SQLite + artefacts locaux]
+  M --> A[FastAPI]
+  A --> H[/health, /ready, /profiles, /predict]
+  C[GitHub Actions] --> Q[pytest + Ruff + Bandit + Trivy + Gitleaks]
+  Q --> I[Docker image]
+  I --> R[GHCR sur push main uniquement]
+```
 
-Terraform provisions the Docker network.
-MLflow tracks ML experiments and metrics.
+## Fonctionnalités
 
-## Tech Stack
+- `GET /health` : liveness de l'API, sans chargement du modèle.
+- `GET /ready` : vérifie que l'artefact du modèle est chargeable.
+- `GET /profiles` : trois profils de démonstration en mémoire.
+- `POST /predict` : prédit un domaine à partir d'une chaîne de compétences.
+- Validation Pydantic des entrées et réponses `503` si le modèle est indisponible.
+- Entraînement reproductible avec métriques, baseline, validation croisée et matrice de confusion.
+- Suivi MLflow local des paramètres, métriques et artefacts.
 
-- Backend: Python, FastAPI
-- ML: scikit-learn, TF-IDF, Logistic Regression
-- MLOps: MLflow
-- Containers: Docker, Docker Compose
-- Infrastructure: Terraform, Ansible
-- CI/CD: GitHub Actions, GHCR
-- Security: Bandit, Gitleaks, Trivy
-- Testing: pytest
+## Prérequis
 
-## Features
+- Python 3.12 pour reproduire exactement la CI et l'entraînement épinglé.
+- Docker et Docker Compose pour les conteneurs.
+- Git pour le checkout.
 
-- GET /health — API health check
-- GET /profiles — Sample profiles
-- POST /predict — Predict Backend, DevOps or MLOps
-- MLflow experiment tracking
-- Automated CI and DevSecOps checks
-- Versioned Docker images published to GHCR
-- Ansible deployment, verification and manual rollback
+Python 3.10 peut exécuter les tests API avec des dépendances compatibles déjà installées, mais peut émettre un avertissement lorsqu'il charge le modèle généré avec une autre version de scikit-learn.
 
-## CI/CD Pipeline
+## Installation locale
 
-1. Pull Request triggers automated tests and security scans.
-2. Docker image is built and security-scanned.
-3. After merging into main, the image is published to GHCR.
-4. Ansible deploys a selected image version using Docker Compose.
-5. Post-deployment health checks validate the services.
+```bash
+python -m venv .venv
+source .venv/bin/activate       # Windows : .venv\\Scripts\\Activate.ps1
+python -m pip install -r requirements-api.txt -r requirements-dev.txt
+```
 
-## Deployment
+## Tests et qualité
 
-Requires Docker, Docker Compose, Ansible and Terraform
-in a configured Ubuntu environment.
+```bash
+python -m pytest -q
+python -m ruff check .
+```
 
-From the ansible directory:
+Les contrôles CI ajoutent Bandit, Gitleaks, Trivy et une construction d'image. La publication GHCR n'est activée que pour un push sur `main` après le passage des contrôles ; aucune publication AWS n'est configurée.
 
-    ansible-playbook playbooks/site.yml
+## Entraînement et MLflow
 
-Override the Docker image version:
+Installer les dépendances ML puis lancer :
 
-    ansible-playbook playbooks/site.yml -e "api_image=IMAGE_TAG"
+```bash
+python -m pip install -r requirements-api.txt -r requirements-ml.txt
+python ml/validate_data.py
+python -m ml.train
+```
 
-The deployment is idempotent and supports manual rollback.
+Le script écrit `models/model.joblib`, `models/evaluation.json` et `models/confusion_matrix.csv` (ces deux rapports sont des artefacts générés ignorés par Git). Il journalise dans une base SQLite locale par défaut. Pour utiliser un serveur MLflow local, définir `MLFLOW_TRACKING_URI`, par exemple `http://127.0.0.1:5001`.
 
-## Local URLs
+Les métriques sont calculées sur une partition de test et par validation croisée stratifiée à trois plis. Elles décrivent ce petit dataset synthétique et ne prouvent pas une généralisation à des données réelles.
 
-- FastAPI: http://localhost:8002/docs
-- MLflow: http://localhost:5001
+## API sans Docker
 
-## Notes
+```bash
+uvicorn app.main:app --reload
+```
 
-The ML dataset is small and synthetic.
-Model accuracy is not representative of production performance.
-Deployment is currently manual on a local Ubuntu VM.
+Documentation interactive : <http://127.0.0.1:8000/docs>.
+
+Exemple :
+
+```bash
+curl -X POST http://127.0.0.1:8000/predict \
+  -H 'Content-Type: application/json' \
+  -d '{"skills":"Python Docker Kubernetes Terraform"}'
+```
+
+## Docker Compose
+
+L'image API contient le modèle et l'image MLflow utilise une base SQLite et un dossier `mlartifacts` montés dans le projet. Le réseau est créé automatiquement par Compose ; Terraform Docker n'est donc pas nécessaire pour un démarrage local simple.
+
+```bash
+New-Item -ItemType Directory -Force mlartifacts     # PowerShell
+mkdir -p mlartifacts                                # bash
+docker build -t mini-crm-api:v1 .
+docker build -f Dockerfile.mlflow -t mini-crm-mlflow:v1 .
+docker compose up -d
+docker compose ps
+```
+
+API : <http://127.0.0.1:8002/docs>. MLflow : <http://127.0.0.1:5001>. Les deux ports sont liés à localhost. `docker compose down` arrête les services sans supprimer la base ni les artefacts.
+
+Ansible peut vérifier et démarrer un environnement déjà équipé de Docker avec `ansible-playbook playbooks/site.yml` depuis `ansible/`. Le chemin de projet et l'image doivent être adaptés dans les variables de l'inventaire ; aucun hôte distant n'est provisionné par ce dépôt.
+
+## Sécurité
+
+Les conteneurs utilisent des utilisateurs non-root. Les ports sont liés à localhost par défaut. La CI applique Bandit, Gitleaks et Trivy, avec une exception Gitleaks limitée à l'empreinte du commit utilisée comme tag d'image GHCR. Cette exception ne doit pas servir à masquer un secret. Les secrets AWS et les credentials ne sont pas présents dans le dépôt.
+
+## Structure
+
+```text
+app/                 API FastAPI et chargement du modèle
+data/                dataset synthétique versionné
+ml/                  génération, validation et entraînement
+models/              artefact de modèle servant l'API
+tests/               tests unitaires et API
+ansible/             préflight, déploiement Compose et vérifications
+terraform/           réseau Docker local
+docs/                audits et plan d'apprentissage AWS
+```
+
+## Limitations connues
+
+- Les profils API sont en mémoire et ne constituent pas une base CRM.
+- Le dataset est synthétique et très petit ; les scores ne sont pas représentatifs d'un usage réel.
+- Le fichier joblib est un artefact binaire qui doit être reconstruit avec les versions épinglées.
+- MLflow utilise SQLite et un stockage local : cette configuration n'est pas une architecture multi-instance.
+- Le déploiement est local et manuel ; aucune ressource AWS n'est créée par la CI.
+
+## Roadmap
+
+Les audits historiques sont dans `docs/audits/`. Le plan pédagogique sans exécution Cloud est dans [`docs/AWS_LEARNING_PLAN.md`](docs/AWS_LEARNING_PLAN.md). Les prochaines étapes sont la stabilisation de `main`, la validation ML sur un jeu indépendant, puis l'apprentissage AWS manuel avec un budget contrôlé.
+
+## Licence
+
+Aucune licence open source n'est déclarée dans le dépôt. Ajouter une licence avant toute réutilisation publique du code.

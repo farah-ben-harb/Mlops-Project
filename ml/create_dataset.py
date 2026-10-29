@@ -1,7 +1,7 @@
 
 import csv
-from pathlib import Path
 from collections import Counter
+from pathlib import Path
 
 # Donnees entierement fictives
 samples = [
