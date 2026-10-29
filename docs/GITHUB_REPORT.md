@@ -7,6 +7,8 @@
 - `feature/devsecops-scanning`, `feature/ghcr-publish`, `feature/ghcr-deploy` : branches historiques, PR #1–#3 fusionnées dans `main`.
 - `feature/mlops-pipeline` : branche distante non fusionnée ; elle contient une première automatisation ML mais mélange le téléchargement du modèle et le build Docker dans un ordre incorrect. Elle reste à examiner séparément.
 - Protection de `main` : non activée au moment de l'audit ; aucune règle n'a été changée.
+- Description mise à jour : « Local FastAPI MLOps lab with MLflow, Docker Compose, Terraform Docker, Ansible and GitHub Actions. »
+- Topics configurés : `python`, `fastapi`, `machine-learning`, `mlops`, `mlflow`, `docker`, `devops`, `github-actions`, `terraform`, `ansible`.
 
 ## Travail réalisé ici
 
