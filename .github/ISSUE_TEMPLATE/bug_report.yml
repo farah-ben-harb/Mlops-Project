@@ -1,0 +1,35 @@
+name: Bug report
+description: Signaler un comportement incorrect ou une régression
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de vérifier les issues existantes et de ne jamais publier de secret.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Décrire clairement le comportement observé.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Donner les étapes minimales et les commandes utiles.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Résultat attendu
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environnement
+      placeholder: Python, OS, Docker, commit
