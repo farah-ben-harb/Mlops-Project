@@ -21,14 +21,14 @@ Dernière exécution de référence : [Mini CRM - DevSecOps CI](https://github.c
 
 ```mermaid
 flowchart LR
-  D[data/profiles.csv] --> T[ml/train.py]
-  T --> M[models/model.joblib]
-  T --> F[MLflow SQLite + artefacts locaux]
-  M --> A[FastAPI]
-  A --> H[/health, /ready, /profiles, /predict]
-  C[GitHub Actions] --> Q[pytest + Ruff + Bandit + Trivy + Gitleaks]
-  Q --> I[Docker image]
-  I --> R[GHCR sur push main uniquement]
+  D["data/profiles.csv"] --> T["ml/train.py"]
+  T --> M["models/model.joblib"]
+  T --> F["MLflow SQLite + artefacts locaux"]
+  M --> A["FastAPI"]
+  A --> H["/health · /ready · /profiles · /predict"]
+  C["GitHub Actions"] --> Q["pytest + Ruff + Bandit + Trivy + Gitleaks"]
+  Q --> I["Docker image"]
+  I --> R["GHCR sur push main uniquement"]
 ```
 
 ## Fonctionnalités
