@@ -3,16 +3,16 @@
 ## État observé avant cette branche
 
 - `main` : `13f70c4`, stable mais CI historique en échec Gitleaks.
-- `codex/fix-gitleaks-image-tag` : branche distante existante avec PR brouillon #4 ; son run CI observé était vert. Cette branche n'a pas été modifiée ni supprimée.
+- `fix/gitleaks-image-tag` : branche issue de la PR #4, conservée après fusion pour préserver l'historique de la correction Gitleaks.
 - `feature/devsecops-scanning`, `feature/ghcr-publish`, `feature/ghcr-deploy` : branches historiques, PR #1–#3 fusionnées dans `main`.
 - `feature/mlops-pipeline` : branche distante non fusionnée ; elle contient une première automatisation ML mais mélange le téléchargement du modèle et le build Docker dans un ordre incorrect. Elle reste à examiner séparément.
 - Protection de `main` : non activée au moment de l'audit ; aucune règle n'a été changée.
-- Description mise à jour : « Local FastAPI MLOps lab with MLflow, Docker Compose, Terraform Docker, Ansible and GitHub Actions. »
-- Topics configurés : `python`, `fastapi`, `machine-learning`, `mlops`, `mlflow`, `docker`, `devops`, `github-actions`, `terraform`, `ansible`.
+- Description mise à jour : « Educational FastAPI MLOps lab for synthetic CRM profile classification with MLflow, Docker Compose, DevSecOps CI, GHCR, Terraform and Ansible. »
+- Topics configurés : `python`, `fastapi`, `machine-learning`, `mlops`, `mlflow`, `docker`, `docker-compose`, `devops`, `devsecops`, `github-actions`, `ghcr`, `terraform`, `ansible`, `crm`, `scikit-learn`.
 
 ## Travail réalisé ici
 
-Branche locale et future branche distante : `fix/local-stabilization`. Aucun nom `codex` n'est utilisé pour cette branche.
+Branche locale et distante : `fix/local-stabilization`. Les branches de travail utilisent les préfixes `feature/`, `fix/` et `docs/`.
 
 Le périmètre est cohérent : stabilisation FastAPI/tests, qualité de données et entraînement ML, portabilité Compose/MLflow, Ruff/CI et documentation. Aucun secret AWS, déploiement Cloud, force push, suppression de branche ou fusion dans `main` n'a été effectué.
 
@@ -20,9 +20,9 @@ PR ouverte : [#5 — fix: stabilize local API and ML workflow](https://github.co
 
 ## Découpage recommandé des PR
 
-1. PR #4 existante : corriger l'exception Gitleaks ciblée et obtenir la CI verte sur `main`; fusion manuelle par la mainteneuse.
-2. PR `fix/local-stabilization` : ce travail, déjà ouverte en #5 ; cible `main` et doit être fusionnée après la PR #4.
-3. PR ultérieure : documentation GitHub/Nettoyage si un découpage plus petit est préféré.
+1. PR #4 : correction de l'exception Gitleaks ciblée, fusionnée dans `main` avec la CI verte.
+2. PR #5 : stabilisation locale FastAPI/ML, fusionnée dans `main` après synchronisation avec la PR #4.
+3. PR #6 : documentation et gouvernance GitHub, fusionnée dans `main` avec la CI verte.
 
 ## Protection recommandée pour `main`
 
