@@ -6,6 +6,11 @@ services:
       - "127.0.0.1:8002:8000"
     networks:
       - crm_network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
     restart: unless-stopped
 
   mlflow:
@@ -19,16 +24,21 @@ services:
         target: /tracking/mlflow.db
 
       - type: bind
-        source: ./mlruns
-        target: /home/farahbenharb/neofacto-mlops-lab/mlruns
+        source: ./mlartifacts
+        target: /tracking/mlartifacts
 # 1. Utiliser ce réseau, nom logique utilisé
     networks:
       - crm_network
+
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/')"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
 
     restart: unless-stopped
 # 2. Définir ce réseau
 networks:
   crm_network:
-    external: true
-    name: neofacto-mlops-network
+    name: ${DOCKER_NETWORK_NAME:-mini-crm-network}
 

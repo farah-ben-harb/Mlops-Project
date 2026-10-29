@@ -16,6 +16,9 @@ __pycache__/
 # MLflow
 mlflow.db*
 mlruns/
+mlartifacts/
+models/evaluation.json
+models/confusion_matrix.csv
 
 # Terraform
 **/.terraform/
@@ -31,3 +34,4 @@ mlruns/
 # IDE
 .vscode/
 .idea/
+.ruff_cache/

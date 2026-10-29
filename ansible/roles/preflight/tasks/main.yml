@@ -26,16 +26,6 @@
       - "'api' in compose_services.stdout_lines"
       - "'mlflow' in compose_services.stdout_lines"
 
-- name: Verifier le reseau Terraform
-  command:
-    argv:
-      - docker
-      - network
-      - inspect
-      - "{{ docker_network_name }}"
-  changed_when: false
-
-
 - name: Verifier les images Docker
   command:
     argv:
@@ -44,6 +34,7 @@
       - inspect
       - "{{ item }}"
   loop:
+    - "{{ api_image }}"
     - mini-crm-mlflow:v1
   changed_when: false
 
@@ -66,15 +57,15 @@
   loop_control:
     label: "{{ item.item }}"
 
-- name: Verifier le dossier MLflow
+- name: Verifier le dossier des artefacts MLflow
   stat:
-    path: "{{ project_dir }}/mlruns"
-  register: mlruns_check
+    path: "{{ project_dir }}/mlartifacts"
+  register: mlartifacts_check
 
-- name: Confirmer le dossier MLflow
+- name: Confirmer le dossier des artefacts MLflow
   assert:
     that:
-      - mlruns_check.stat.isdir | default(false)
+      - mlartifacts_check.stat.isdir | default(false)
 
 - name: Afficher le resultat
   debug:
