@@ -14,10 +14,12 @@ Branche locale et future branche distante : `fix/local-stabilization`. Aucun nom
 
 Le périmètre est cohérent : stabilisation FastAPI/tests, qualité de données et entraînement ML, portabilité Compose/MLflow, Ruff/CI et documentation. Aucun secret AWS, déploiement Cloud, force push, suppression de branche ou fusion dans `main` n'a été effectué.
 
+PR ouverte : [#5 — fix: stabilize local API and ML workflow](https://github.com/farah-ben-harb/Mlops-Project/pull/5). Commit initial : `c6b0545`. Son premier run CI (`40851592879`) est vert pour Python Tests, ML Training and Validation, Bandit, Gitleaks, Trivy et Docker Build and Security Scan ; la publication GHCR est correctement ignorée sur une Pull Request.
+
 ## Découpage recommandé des PR
 
 1. PR #4 existante : corriger l'exception Gitleaks ciblée et obtenir la CI verte sur `main`; fusion manuelle par la mainteneuse.
-2. PR `fix/local-stabilization` : ce travail, à ouvrir après le commit et le push ; cible `main` et doit être fusionnée après la PR #4.
+2. PR `fix/local-stabilization` : ce travail, déjà ouverte en #5 ; cible `main` et doit être fusionnée après la PR #4.
 3. PR ultérieure : documentation GitHub/Nettoyage si un découpage plus petit est préféré.
 
 ## Protection recommandée pour `main`
@@ -26,4 +28,4 @@ Activer après validation des noms de jobs : fusion par Pull Request, checks `Py
 
 ## Suivi après ouverture
 
-Le statut réel de la PR de stabilisation et son SHA seront ajoutés après le push. La publication GHCR reste conditionnée à un push sur `main`; aucune publication AWS n'est introduite.
+La publication GHCR reste conditionnée à un push sur `main`; aucune publication AWS n'est introduite.
