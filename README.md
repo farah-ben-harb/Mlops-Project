@@ -1,8 +1,8 @@
 # Mini CRM Intelligence
 
-[![CI](https://github.com/farah-ben-harb/Mlops-Project/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/farah-ben-harb/Mlops-Project/actions/workflows/ci.yml)
+[![CI](https://github.com/farah-ben-harb/crm-intelligence-mlops/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/farah-ben-harb/crm-intelligence-mlops/actions/workflows/ci.yml)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Container Registry](https://img.shields.io/badge/GHCR-mini--crm--api-2496ED?logo=docker&logoColor=white)](https://github.com/farah-ben-harb/Mlops-Project/pkgs/container/mini-crm-api)
+[![Container Registry](https://img.shields.io/badge/GHCR-mini--crm--api-2496ED?logo=docker&logoColor=white)](https://github.com/farah-ben-harb/crm-intelligence-mlops/pkgs/container/mini-crm-api)
 
 Mini CRM Intelligence est un laboratoire local de classification de profils techniques. Il combine une API FastAPI, un pipeline TF-IDF + Logistic Regression, MLflow, Docker Compose, Ansible, Terraform pour le réseau Docker et une CI GitHub Actions avec contrôles de sécurité.
 
@@ -12,10 +12,10 @@ Le projet est un démonstrateur pédagogique basé sur 30 profils synthétiques 
 
 - `main` est la branche de référence et la CI est verte sur le dernier commit validé.
 - Chaque pull request exécute les tests, Ruff, Bandit, Gitleaks, Trivy, la validation ML et le build Docker.
-- Une image immuable est publiée dans [GHCR](https://github.com/farah-ben-harb/Mlops-Project/pkgs/container/mini-crm-api) uniquement après un push réussi sur `main`.
+- Une image immuable est publiée dans [GHCR](https://github.com/farah-ben-harb/crm-intelligence-mlops/pkgs/container/mini-crm-api) uniquement après un push réussi sur `main`.
 - Le périmètre est volontairement local et pédagogique : aucune ressource AWS n'est créée par le dépôt.
 
-Dernière exécution de référence : [Mini CRM - DevSecOps CI](https://github.com/farah-ben-harb/Mlops-Project/actions/runs/40854348261).
+Dernière exécution de référence : [Mini CRM - DevSecOps CI](https://github.com/farah-ben-harb/crm-intelligence-mlops/actions/runs/40902166984).
 
 ## Architecture
 
