@@ -16,7 +16,7 @@ Branche locale et distante : `fix/local-stabilization`. Les branches de travail 
 
 Le périmètre est cohérent : stabilisation FastAPI/tests, qualité de données et entraînement ML, portabilité Compose/MLflow, Ruff/CI et documentation. Aucun secret AWS, déploiement Cloud, force push, suppression de branche ou fusion dans `main` n'a été effectué.
 
-PR ouverte : [#5 — fix: stabilize local API and ML workflow](https://github.com/farah-ben-harb/Mlops-Project/pull/5). Commit initial : `c6b0545`. Son premier run CI (`40851592879`) est vert pour Python Tests, ML Training and Validation, Bandit, Gitleaks, Trivy et Docker Build and Security Scan ; la publication GHCR est correctement ignorée sur une Pull Request.
+PR fusionnée : [#5 — fix: stabilize local API and ML workflow](https://github.com/farah-ben-harb/crm-intelligence-mlops/pull/5). Commit initial : `c6b0545`. Son premier run CI (`40851592879`) est vert pour Python Tests, ML Training and Validation, Bandit, Gitleaks, Trivy et Docker Build and Security Scan ; la publication GHCR est correctement ignorée sur une Pull Request.
 
 ## Découpage recommandé des PR
 
