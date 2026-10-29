@@ -1,8 +1,21 @@
 # Mini CRM Intelligence
 
+[![CI](https://github.com/farah-ben-harb/Mlops-Project/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/farah-ben-harb/Mlops-Project/actions/workflows/ci.yml)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Container Registry](https://img.shields.io/badge/GHCR-mini--crm--api-2496ED?logo=docker&logoColor=white)](https://github.com/farah-ben-harb/Mlops-Project/pkgs/container/mini-crm-api)
+
 Mini CRM Intelligence est un laboratoire local de classification de profils techniques. Il combine une API FastAPI, un pipeline TF-IDF + Logistic Regression, MLflow, Docker Compose, Ansible, Terraform pour le réseau Docker et une CI GitHub Actions avec contrôles de sécurité.
 
 Le projet est un démonstrateur pédagogique basé sur 30 profils synthétiques équilibrés entre `Backend`, `DevOps` et `MLOps`. Il ne constitue pas une mesure de performance sur des profils réels. Aucun déploiement AWS n'est inclus dans l'état actuel du dépôt.
+
+## Statut du dépôt
+
+- `main` est la branche de référence et la CI est verte sur le dernier commit validé.
+- Chaque pull request exécute les tests, Ruff, Bandit, Gitleaks, Trivy, la validation ML et le build Docker.
+- Une image immuable est publiée dans [GHCR](https://github.com/farah-ben-harb/Mlops-Project/pkgs/container/mini-crm-api) uniquement après un push réussi sur `main`.
+- Le périmètre est volontairement local et pédagogique : aucune ressource AWS n'est créée par le dépôt.
+
+Dernière exécution de référence : [Mini CRM - DevSecOps CI](https://github.com/farah-ben-harb/Mlops-Project/actions/runs/40854348261).
 
 ## Architecture
 
@@ -52,6 +65,12 @@ python -m ruff check .
 ```
 
 Les contrôles CI ajoutent Bandit, Gitleaks, Trivy et une construction d'image. La publication GHCR n'est activée que pour un push sur `main` après le passage des contrôles ; aucune publication AWS n'est configurée.
+
+## Contribuer
+
+Consulter [`CONTRIBUTING.md`](CONTRIBUTING.md) avant de créer une branche ou une pull request. Les branches de travail suivent les préfixes `feature/`, `fix/` ou `docs/`. Une pull request doit rester ciblée, documenter les vérifications effectuées et passer tous les contrôles CI avant un squash merge dans `main`.
+
+Pour les incidents de sécurité, suivre [`SECURITY.md`](SECURITY.md) et ne pas publier de secret ou de preuve d'exploitation dans une issue publique.
 
 ## Entraînement et MLflow
 
@@ -127,8 +146,8 @@ docs/                audits et plan d'apprentissage AWS
 
 ## Roadmap
 
-Les audits historiques sont dans `docs/audits/`. Le plan pédagogique sans exécution Cloud est dans [`docs/AWS_LEARNING_PLAN.md`](docs/AWS_LEARNING_PLAN.md). Les prochaines étapes sont la stabilisation de `main`, la validation ML sur un jeu indépendant, puis l'apprentissage AWS manuel avec un budget contrôlé.
+Le plan pédagogique sans exécution Cloud est dans [`docs/AWS_LEARNING_PLAN.md`](docs/AWS_LEARNING_PLAN.md). Les prochaines étapes sont la validation ML sur un jeu indépendant, le durcissement DevSecOps avancé, puis l'apprentissage AWS manuel avec un budget contrôlé.
 
 ## Licence
 
-Aucune licence open source n'est déclarée dans le dépôt. Ajouter une licence avant toute réutilisation publique du code.
+Aucune licence open source n'est déclarée dans le dépôt. Le choix de licence doit être validé par le mainteneur avant toute réutilisation publique du code.
