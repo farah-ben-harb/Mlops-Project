@@ -20,15 +20,15 @@ Dernière exécution de référence : [Mini CRM - DevSecOps CI](https://github.c
 ## Architecture
 
 ```mermaid
-flowchart LR
-  D["data/profiles.csv"] --> T["ml/train.py"]
-  T --> M["models/model.joblib"]
-  T --> F["MLflow SQLite + artefacts locaux"]
-  M --> A["FastAPI"]
-  A --> H["/health · /ready · /profiles · /predict"]
-  C["GitHub Actions"] --> Q["pytest + Ruff + Bandit + Trivy + Gitleaks"]
-  Q --> I["Docker image"]
-  I --> R["GHCR sur push main uniquement"]
+graph LR
+  D[data profiles csv] --> T[ml train]
+  T --> M[model artifact]
+  T --> F[MLflow tracking]
+  M --> A[FastAPI]
+  A --> H[API endpoints]
+  C[GitHub Actions] --> Q[quality and security checks]
+  Q --> I[Docker image]
+  I --> R[GHCR on main]
 ```
 
 ## Fonctionnalités
